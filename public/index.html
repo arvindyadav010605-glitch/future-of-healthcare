@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedAI Nexus — Future of Healthcare</title>
+  <meta name="description" content="AI-powered next-generation healthcare platform with real-time patient monitoring, smart diagnostics, drug interaction checker, and intelligent appointment management." />
+  <meta name="keywords" content="healthcare AI, patient management, symptom checker, drug lookup, telemedicine" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- App wrapper -->
+  <div class="app-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Logo -->
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M9 12h6M12 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">MedAI</span>
+          <span class="logo-sub">Nexus</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">
+          <i data-lucide="panel-left-close" size="18"></i>
+        </button>
+      </div>
+
+      <!-- Live status -->
+      <div class="sidebar-status">
+        <span class="status-dot"></span>
+        <span class="status-text">System Online</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="#dashboard" class="nav-item active" id="nav-dashboard">
+          <i data-lucide="layout-dashboard" size="18"></i>
+          <span>Dashboard</span>
+          <span class="nav-badge" id="badge-alerts">3</span>
+        </a>
+        <a href="#patients" class="nav-item" id="nav-patients">
+          <i data-lucide="users" size="18"></i>
+          <span>Patients</span>
+        </a>
+        <a href="#appointments" class="nav-item" id="nav-appointments">
+          <i data-lucide="calendar-check" size="18"></i>
+          <span>Appointments</span>
+          <span class="nav-dot"></span>
+        </a>
+
+        <div class="nav-section-label">AI Tools</div>
+        <a href="#ai-checker" class="nav-item" id="nav-ai-checker">
+          <i data-lucide="brain-circuit" size="18"></i>
+          <span>AI Symptom Check</span>
+          <span class="nav-tag">AI</span>
+        </a>
+        <a href="#drugs" class="nav-item" id="nav-drugs">
+          <i data-lucide="pill" size="18"></i>
+          <span>Drug Lookup</span>
+        </a>
+
+        <div class="nav-section-label">Insights</div>
+        <a href="#analytics" class="nav-item" id="nav-analytics">
+          <i data-lucide="bar-chart-3" size="18"></i>
+          <span>Analytics</span>
+        </a>
+        <a href="#news" class="nav-item" id="nav-news">
+          <i data-lucide="newspaper" size="18"></i>
+          <span>Health News</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="sidebarUserAvatar">DR</div>
+          <div class="user-info">
+            <span class="user-name" id="sidebarUserName">Dr. Admin</span>
+            <span class="user-role" id="sidebarUserRole">Chief Medical Officer</span>
+          </div>
+        </div>
+        <button id="logoutBtn" title="Sign Out" style="
+          width: 100%; margin-top: 8px;
+          display: flex; align-items: center; justify-content: center; gap: 8px;
+          padding: 9px 14px; border-radius: 10px;
+          background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2);
+          color: #f87171; font-size: 13px; font-weight: 600;
+          cursor: pointer; font-family: 'Inter', sans-serif;
+          transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+        " onmouseover="this.style.background='rgba(248,113,113,0.18)';this.style.borderColor='rgba(248,113,113,0.4)';"
+           onmouseout="this.style.background='rgba(248,113,113,0.08)';this.style.borderColor='rgba(248,113,113,0.2)';"
+        >
+          <i data-lucide="log-out" size="14"></i>
+          <span class="sidebar-logout-text">Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content area -->
+    <main class="main-content" id="mainContent">
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-btn" id="menuBtn">
+            <i data-lucide="menu" size="20"></i>
+          </button>
+          <div class="page-breadcrumb">
+            <span class="breadcrumb-home">MedAI Nexus</span>
+            <i data-lucide="chevron-right" size="14"></i>
+            <span class="breadcrumb-page" id="currentPage">Dashboard</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-time" id="topbarTime"></div>
+          <button class="topbar-btn" id="refreshBtn" title="Refresh">
+            <i data-lucide="refresh-cw" size="16"></i>
+          </button>
+          <div class="notification-btn" id="notifBtn">
+            <i data-lucide="bell" size="16"></i>
+            <span class="notif-badge">3</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page container -->
+      <div class="page-container" id="pageContainer">
+        <!-- Pages are loaded here dynamically -->
+        <div class="page-loading" id="pageLoading">
+          <div class="loading-spinner"></div>
+          <span>Loading...</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal backdrop -->
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- Patient Modal -->
+  <div class="modal" id="patientModal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="patientModalTitle">Add New Patient</h2>
+      <button class="modal-close" id="closePatientModal"><i data-lucide="x" size="20"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="patientForm">
+        <input type="hidden" id="patientId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="patientName" class="form-input" placeholder="e.g. Arjun Sharma" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Age *</label>
+            <input type="number" id="patientAge" class="form-input" placeholder="35" min="1" max="120" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Gender *</label>
+            <select id="patientGender" class="form-input" required>
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Blood Type *</label>
+            <select id="patientBloodType" class="form-input" required>
+              <option value="">Select blood type</option>
+              <option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option>
+              <option>O+</option><option>O-</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="tel" id="patientPhone" class="form-input" placeholder="+91 98765 43210" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" id="patientEmail" class="form-input" placeholder="patient@email.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input type="text" id="patientAddress" class="form-input" placeholder="City, State" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Medical Conditions (comma separated)</label>
+          <input type="text" id="patientConditions" class="form-input" placeholder="e.g. Diabetes, Hypertension" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Allergies (comma separated)</label>
+            <input type="text" id="patientAllergies" class="form-input" placeholder="e.g. Penicillin, Aspirin" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Risk Level</label>
+            <select id="patientRisk" class="form-input">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="savePatientBtn">
+          <i data-lucide="save" size="16"></i> Save Patient
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Appointment Modal -->
+  <div class="modal" id="appointmentModal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="apptModalTitle">Book Appointment</h2>
+      <button class="modal-close" id="closeApptModal"><i data-lucide="x" size="20"></i></button>
+    </div>
+    <div class="modal-body">
+      <form id="appointmentForm">
+        <input type="hidden" id="apptId" />
+        <div class="form-group">
+          <label class="form-label">Patient *</label>
+          <select id="apptPatient" class="form-input" required>
+            <option value="">Select patient</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Doctor *</label>
+            <select id="apptDoctor" class="form-input" required>
+              <option value="">Select doctor</option>
+              <option data-dept="Cardiology">Dr. Kavya Rao — Cardiology</option>
+              <option data-dept="Endocrinology">Dr. Amit Sinha — Endocrinology</option>
+              <option data-dept="Pulmonology">Dr. Preethi Menon — Pulmonology</option>
+              <option data-dept="Neurology">Dr. Suhas Gupta — Neurology</option>
+              <option data-dept="General Medicine">Dr. Nisha Kapoor — General Medicine</option>
+              <option data-dept="Orthopedics">Dr. Rahul Jain — Orthopedics</option>
+              <option data-dept="Gynecology">Dr. Divya Reddy — Gynecology</option>
+              <option data-dept="Nephrology">Dr. Arun Pillai — Nephrology</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="apptStatus" class="form-input">
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date *</label>
+            <input type="date" id="apptDate" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time *</label>
+            <select id="apptTime" class="form-input" required>
+              <option value="">Select time</option>
+              <option>09:00</option><option>09:30</option><option>10:00</option>
+              <option>10:30</option><option>11:00</option><option>11:30</option>
+              <option>14:00</option><option>14:30</option><option>15:00</option>
+              <option>15:30</option><option>16:00</option><option>16:30</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Notes</label>
+          <textarea id="apptNotes" class="form-input" rows="3" placeholder="Additional notes..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <i data-lucide="calendar-plus" size="16"></i> Save Appointment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="/js/app.js"></script>
+  <script src="/js/dashboard.js"></script>
+  <script src="/js/patients.js"></script>
+  <script src="/js/appointments.js"></script>
+  <script src="/js/ai-checker.js"></script>
+  <script src="/js/drugs.js"></script>
+  <script src="/js/analytics.js"></script>
+  <script src="/js/news.js"></script>
+</body>
+</html>

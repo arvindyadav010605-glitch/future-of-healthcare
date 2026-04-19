@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedAI Nexus — Sign In</title>
+  <meta name="description" content="Sign in to MedAI Nexus — the AI-powered future of healthcare platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-light: #a5b4fc;
+      --primary-dark: #4338ca;
+      --accent-teal: #2dd4bf;
+      --accent-emerald: #34d399;
+      --text-primary: #f0f6ff;
+      --text-secondary: #b8c8de;
+      --text-muted: #7a90aa;
+      --border: rgba(255,255,255,0.12);
+      --border-hover: rgba(255,255,255,0.22);
+      --bg-card: rgba(255,255,255,0.05);
+      --bg-input: rgba(255,255,255,0.08);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+      --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { height: 100%; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #080e1e;
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Animated background ---- */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      animation: orbFloat 10s ease-in-out infinite;
+    }
+    .orb-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(99,102,241,0.4), rgba(139,92,246,0.15)); top: -250px; left: -200px; animation-delay: 0s; }
+    .orb-2 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(20,184,166,0.25), rgba(59,130,246,0.1)); bottom: -200px; right: -150px; animation-delay: 3.5s; }
+    .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(236,72,153,0.18), rgba(245,158,11,0.1)); top: 40%; left: 55%; animation-delay: 7s; opacity: 0.7; }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-40px) scale(1.06); }
+    }
+
+    /* Grid pattern overlay */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ---- Layout ---- */
+    .login-wrapper {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      width: 100vw;
+    }
+
+    /* Left panel — branding */
+    .brand-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.12) 70%, transparent);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 60px;
+    }
+
+    .brand-logo-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(99,102,241,0.5);
+    }
+
+    .brand-logo-text { leading: 1; }
+    .brand-name { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, var(--primary-light), var(--accent-teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .brand-tagline { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px; }
+
+    .brand-headline { font-size: 42px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+    .brand-headline span { background: linear-gradient(135deg, var(--primary-light), var(--accent-teal)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .brand-subtext { font-size: 16px; color: var(--text-secondary); line-height: 1.65; max-width: 420px; margin-bottom: 48px; }
+
+    /* Feature list */
+    .feature-list { display: flex; flex-direction: column; gap: 16px; }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+    .feature-item:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.14); transform: translateX(4px); }
+    .feature-icon { font-size: 22px; flex-shrink: 0; }
+    .feature-text { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+    .feature-text strong { color: var(--text-primary); font-weight: 600; }
+
+    /* Trust badges */
+    .trust-row { display: flex; align-items: center; gap: 12px; margin-top: 40px; flex-wrap: wrap; }
+    .trust-badge { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-full); font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .trust-dot { width: 6px; height:6px; border-radius:50%; }
+    .trust-dot.green { background: var(--accent-emerald); box-shadow: 0 0 6px var(--accent-emerald); }
+    .trust-dot.blue { background: #60a5fa; box-shadow: 0 0 6px #60a5fa; }
+    .trust-dot.amber { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; }
+
+    /* ---- Right panel — form ---- */
+    .form-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 48px;
+      background: rgba(255,255,255,0.015);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .login-card-header { text-align: center; margin-bottom: 36px; }
+    .login-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .login-subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Tab switcher */
+    .auth-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+    }
+    .auth-tab.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 2px 10px rgba(99,102,241,0.4);
+    }
+
+    /* Social buttons */
+    .social-buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-hover);
+      background: rgba(255,255,255,0.05);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    .social-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(255,255,255,0.04));
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .social-btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.09); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .social-btn:hover::before { opacity: 1; }
+    .social-btn:active { transform: translateY(0); }
+
+    .social-btn .social-icon { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .social-btn span { flex: 1; text-align: center; padding-right: 22px; }
+
+    /* Google specific */
+    .btn-google:hover { border-color: rgba(234,67,53,0.5); box-shadow: 0 8px 24px rgba(234,67,53,0.2); }
+    .btn-apple:hover { border-color: rgba(255,255,255,0.4); box-shadow: 0 8px 24px rgba(255,255,255,0.1); }
+    .btn-facebook:hover { border-color: rgba(24,119,242,0.5); box-shadow: 0 8px 24px rgba(24,119,242,0.2); }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .divider-line { flex: 1; height: 1px; background: var(--border); }
+    .divider-text { font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+
+    /* Form fields */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+    .input-wrapper { position: relative; }
+    .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px 12px 42px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: var(--transition);
+    }
+    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.18); background: rgba(255,255,255,0.11); }
+    .form-input::placeholder { color: var(--text-muted); }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      transition: var(--transition);
+    }
+    .password-toggle:hover { color: var(--text-secondary); }
+
+    /* Forgot password */
+    .forgot-row { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+    .forgot-link { font-size: 12px; color: var(--primary-light); font-weight: 500; cursor: pointer; text-decoration: none; transition: var(--transition); }
+    .forgot-link:hover { color: white; }
+
+    /* Submit button */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .btn-login::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.6); }
+    .btn-login:hover::after { opacity: 1; }
+    .btn-login:active { transform: translateY(0); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    /* Spinner inside button */
+    .btn-spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; margin: 0 auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Register text */
+    .register-text { text-align: center; font-size: 13px; color: var(--text-muted); }
+    .register-link { color: var(--primary-light); font-weight: 600; cursor: pointer; text-decoration: none; transition: var(--transition); }
+    .register-link:hover { color: white; }
+
+    /* Error / success messages */
+    .form-message {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .form-message.error { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); color: #fca5a5; }
+    .form-message.success { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.3); color: #6ee7b7; }
+    .form-message.show { display: flex; }
+
+    /* Password strength */
+    .strength-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-top: 8px; overflow: hidden; display: none; }
+    .strength-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease, background 0.4s ease; width: 0; }
+    .strength-label { font-size: 11px; margin-top: 5px; font-weight: 600; display: none; }
+    .strength-weak { background: #f87171; }
+    .strength-fair { background: #fbbf24; }
+    .strength-good { background: #34d399; }
+    .strength-strong { background: #818cf8; }
+
+    /* Register form (hidden by default) */
+    #registerForm { display: none; }
+    #loginForm { display: block; }
+
+    /* Footer */
+    .login-footer { text-align: center; margin-top: 28px; font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+    .login-footer a { color: var(--text-muted); text-decoration: underline; transition: var(--transition); }
+    .login-footer a:hover { color: var(--text-secondary); }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .login-wrapper { grid-template-columns: 1fr; }
+      .brand-panel { display: none; }
+      .form-panel { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-canvas">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="bg-grid"></div>
+
+  <div class="login-wrapper">
+    <!-- ===== LEFT: Branding ===== -->
+    <div class="brand-panel">
+      <div class="brand-logo">
+        <div class="brand-logo-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L3 7v10l9 5 9-5V7L12 2z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M9 12h6M12 9v6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-logo-text">
+          <div class="brand-name">MedAI Nexus</div>
+          <div class="brand-tagline">Future of Healthcare</div>
+        </div>
+      </div>
+
+      <h1 class="brand-headline">Healthcare,<br/>Reimagined with <span>AI</span></h1>
+      <p class="brand-subtext">An intelligent platform integrating AI diagnostics, real-time patient monitoring, smart appointments, and drug safety — all in one unified workspace.</p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-text"><strong>AI Symptom Analysis</strong> — Powered by Google Gemini for instant health assessment</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text"><strong>Live Vitals Monitor</strong> — Real-time patient health tracking updated every 3 seconds</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💊</div>
+          <div class="feature-text"><strong>FDA Drug Database</strong> — Searchable drug info, warnings &amp; interaction data</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📈</div>
+          <div class="feature-text"><strong>Predictive Analytics</strong> — Risk scoring, trend analysis &amp; health insights</div>
+        </div>
+      </div>
+
+      <div class="trust-row">
+        <div class="trust-badge"><div class="trust-dot green"></div> HIPAA Compliant</div>
+        <div class="trust-badge"><div class="trust-dot blue"></div> ISO 27001</div>
+        <div class="trust-badge"><div class="trust-dot amber"></div> FDA Approved Data</div>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT: Form ===== -->
+    <div class="form-panel">
+      <div class="login-card">
+        <div class="login-card-header">
+          <div class="login-title">Welcome back 👋</div>
+          <div class="login-subtitle">Sign in to access your healthcare dashboard</div>
+        </div>
+
+        <!-- Tab switcher -->
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+          <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Create Account</button>
+        </div>
+
+        <!-- Message box -->
+        <div class="form-message" id="formMessage"></div>
+
+        <!-- Social Buttons -->
+        <div class="social-buttons">
+          <button class="social-btn btn-google" onclick="socialLogin('Google')">
+            <span class="social-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="#EA4335" d="M5.26620003,9.76452941 C6.19878754,6.93863203 8.85444915,4.90909091 12,4.90909091 C13.6545455,4.90909091 15.1527273,5.47703457 16.3418182,6.41727272 L19.6181818,3.14090909 C17.6072727,1.19454545 15.0181818,0 12,0 C7.27006974,0 3.1977497,2.69829785 1.23999023,6.65002441 L5.26620003,9.76452941 Z"/>
+                <path fill="#34A853" d="M16.0407269,18.0125889 C14.9509167,18.7163016 13.5660892,19.0909091 12,19.0909091 C8.86648613,19.0909091 6.21911939,17.076871 5.27698177,14.2678769 L1.23746264,17.3349879 C3.19279051,21.2936293 7.26500293,24 12,24 C14.9328362,24 17.7353462,22.9573905 19.834192,20.9995801 L16.0407269,18.0125889 Z"/>
+                <path fill="#4285F4" d="M19.834192,20.9995801 C22.0291676,18.9520994 23.4545455,15.903663 23.4545455,12 C23.4545455,11.2909091 23.3454545,10.5272727 23.1818182,9.81818182 L12,9.81818182 L12,14.4545455 L18.4363636,14.4545455 C18.1187732,16.013626 17.2662994,17.2212117 16.0407269,18.0125889 L19.834192,20.9995801 Z"/>
+                <path fill="#FBBC05" d="M5.27698177,14.2678769 C5.03832634,13.556323 4.90909091,12.7937589 4.90909091,12 C4.90909091,11.2182781 5.03443647,10.4668121 5.26620003,9.76452941 L1.23999023,6.65002441 C0.43658717,8.26043162 0,10.0753848 0,12 C0,13.9195484 0.444780743,15.7301709 1.23746264,17.3349879 L5.27698177,14.2678769 Z"/>
+              </svg>
+            </span>
+            <span>Continue with Google</span>
+          </button>
+          <button class="social-btn btn-apple" onclick="socialLogin('Apple')">
+            <span class="social-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </span>
+            <span>Continue with Apple</span>
+          </button>
+          <button class="social-btn btn-facebook" onclick="socialLogin('Facebook')">
+            <span class="social-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </span>
+            <span>Continue with Facebook</span>
+          </button>
+        </div>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-text">or sign in with email</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <!-- ===== Login Form ===== -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <input type="email" id="loginEmail" class="form-input" placeholder="doctor@hospital.com" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required autocomplete="current-password" />
+              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="forgot-row">
+            <a class="forgot-link" onclick="showForgot()">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span id="loginBtnText">Sign In to Dashboard</span>
+            <div class="btn-spinner" id="loginSpinner"></div>
+          </button>
+          <p class="register-text">Don't have an account? <a class="register-link" onclick="switchTab('register')">Create one free</a></p>
+        </form>
+
+        <!-- ===== Register Form ===== -->
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">First Name</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input type="text" id="regFirst" class="form-input" placeholder="Dr. John" required />
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Last Name</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input type="text" id="regLast" class="form-input" placeholder="Smith" required />
+              </div>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:16px;">
+            <label class="form-label">Work Email</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <input type="email" id="regEmail" class="form-input" placeholder="doctor@hospital.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              <select id="regRole" class="form-input" style="padding-left: 42px; appearance: none;">
+                <option value="">Select your role</option>
+                <option>Chief Medical Officer</option>
+                <option>General Physician</option>
+                <option>Specialist Doctor</option>
+                <option>Nurse / Nurse Practitioner</option>
+                <option>Hospital Administrator</option>
+                <option>Medical Researcher</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input type="password" id="regPassword" class="form-input" placeholder="Create a strong password" required oninput="checkStrength(this.value)" />
+              <button type="button" class="password-toggle" onclick="togglePassword('regPassword', this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="strength-bar" id="strengthBar"><div class="strength-fill" id="strengthFill"></div></div>
+            <div class="strength-label" id="strengthLabel"></div>
+          </div>
+          <button type="submit" class="btn-login" id="registerBtn" style="margin-top: 4px;">
+            <span id="registerBtnText">Create Account</span>
+            <div class="btn-spinner" id="registerSpinner"></div>
+          </button>
+          <p class="register-text">Already have an account? <a class="register-link" onclick="switchTab('login')">Sign in</a></p>
+        </form>
+
+        <div class="login-footer">
+          By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.<br/>
+          Protected by end-to-end encryption.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- Tab switcher ----
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+
+      const header = document.querySelector('.login-title');
+      const sub = document.querySelector('.login-subtitle');
+      if (isLogin) {
+        header.textContent = 'Welcome back 👋';
+        sub.textContent = 'Sign in to access your healthcare dashboard';
+      } else {
+        header.textContent = 'Create your account ✨';
+        sub.textContent = 'Join MedAI Nexus — Future of Healthcare';
+      }
+      hideMessage();
+    }
+
+    // ---- Toggle password visibility ----
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const isText = input.type === 'text';
+      input.type = isText ? 'password' : 'text';
+      btn.innerHTML = isText
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    }
+
+    // ---- Password strength ----
+    function checkStrength(password) {
+      const bar = document.getElementById('strengthBar');
+      const fill = document.getElementById('strengthFill');
+      const label = document.getElementById('strengthLabel');
+
+      if (!password) {
+        bar.style.display = 'none';
+        label.style.display = 'none';
+        return;
+      }
+
+      bar.style.display = 'block';
+      label.style.display = 'block';
+
+      let score = 0;
+      if (password.length >= 8) score++;
+      if (password.length >= 12) score++;
+      if (/[A-Z]/.test(password)) score++;
+      if (/[0-9]/.test(password)) score++;
+      if (/[^A-Za-z0-9]/.test(password)) score++;
+
+      const levels = [
+        { width: '25%', class: 'strength-weak', text: '⚠️ Weak', color: '#f87171' },
+        { width: '50%', class: 'strength-fair', text: '🟡 Fair', color: '#fbbf24' },
+        { width: '75%', class: 'strength-good', text: '🟢 Good', color: '#34d399' },
+        { width: '100%', class: 'strength-strong', text: '💪 Strong', color: '#a5b4fc' }
+      ];
+      const level = levels[Math.min(Math.floor(score / 1.3), 3)];
+
+      fill.style.width = level.width;
+      fill.style.background = level.color;
+      label.textContent = level.text;
+      label.style.color = level.color;
+    }
+
+    // ---- Messages ----
+    function showMessage(text, type = 'error') {
+      const el = document.getElementById('formMessage');
+      el.textContent = (type === 'error' ? '⚠️  ' : '✅  ') + text;
+      el.className = `form-message ${type} show`;
+    }
+    function hideMessage() {
+      const el = document.getElementById('formMessage');
+      el.className = 'form-message';
+    }
+
+    // ---- Simulate loading state ----
+    function setLoading(btnId, spinnerId, textId, loading, text = '') {
+      const btn = document.getElementById(btnId);
+      const spinner = document.getElementById(spinnerId);
+      const label = document.getElementById(textId);
+      btn.disabled = loading;
+      spinner.style.display = loading ? 'block' : 'none';
+      label.style.display = loading ? 'none' : 'block';
+      if (text) label.textContent = text;
+    }
+
+    // ---- Auth via localStorage ----
+    function doLogin(name, role, avatar) {
+      localStorage.setItem('medai_user', JSON.stringify({
+        name, role, avatar, loggedIn: true, loginTime: Date.now()
+      }));
+      window.location.href = '/';
+    }
+
+    // ---- Social Login ----
+    function socialLogin(provider) {
+      const btn = event.currentTarget;
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+      btn.innerHTML = `<span style="color: var(--text-muted); font-size:13px;">Connecting to ${provider}...</span>`;
+
+      setTimeout(() => {
+        const profiles = {
+          Google: { name: 'Dr. Google User', role: 'General Physician', avatar: 'GU' },
+          Apple: { name: 'Dr. Apple User', role: 'Specialist Doctor', avatar: 'AU' },
+          Facebook: { name: 'Dr. Facebook User', role: 'Hospital Administrator', avatar: 'FU' }
+        };
+        const p = profiles[provider];
+        doLogin(p.name, p.role, p.avatar);
+      }, 1800);
+    }
+
+    // ---- Email Login ----
+    function handleLogin(e) {
+      e.preventDefault();
+      hideMessage();
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) { showMessage('Please fill in all fields'); return; }
+      if (password.length < 6) { showMessage('Password must be at least 6 characters'); return; }
+
+      setLoading('loginBtn', 'loginSpinner', 'loginBtnText', true);
+
+      setTimeout(() => {
+        // Demo: accept any valid email/password combo
+        const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        doLogin('Dr. ' + name, 'Chief Medical Officer', name.split(' ').map(n => n[0]).join('').substring(0, 2));
+      }, 1500);
+    }
+
+    // ---- Register ----
+    function handleRegister(e) {
+      e.preventDefault();
+      hideMessage();
+      const first = document.getElementById('regFirst').value;
+      const last = document.getElementById('regLast').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      if (!first || !last || !email || !password) { showMessage('Please fill in all required fields'); return; }
+      if (password.length < 8) { showMessage('Password must be at least 8 characters'); return; }
+
+      setLoading('registerBtn', 'registerSpinner', 'registerBtnText', true);
+
+      setTimeout(() => {
+        showMessage(`Account created for ${first} ${last}! Signing you in...`, 'success');
+        setTimeout(() => {
+          doLogin(`Dr. ${first} ${last}`, document.getElementById('regRole').value || 'General Physician',
+            (first[0] + last[0]).toUpperCase());
+        }, 1000);
+      }, 1500);
+    }
+
+    // ---- Forgot Password ----
+    function showForgot() {
+      const email = document.getElementById('loginEmail').value;
+      if (email) {
+        showMessage(`Password reset link sent to ${email}. Check your inbox.`, 'success');
+      } else {
+        showMessage('Enter your email address first, then click Forgot password.');
+      }
+    }
+
+    // ---- Redirect if already logged in ----
+    (function() {
+      const user = localStorage.getItem('medai_user');
+      if (user) {
+        try {
+          const parsed = JSON.parse(user);
+          if (parsed.loggedIn) window.location.href = '/';
+        } catch(e) {}
+      }
+    })();
+  </script>
+</body>
+</html>
